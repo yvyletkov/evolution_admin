@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/translations/ru.js"></script>
+
+    <title>Главная</title>
+</head>
+<body>
+
+<div class="container">
+    <div id="editor"></div>
+
+    <button class="submit-btn">Сформировать</button>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label>Файл</label><br>
+        <input type="file" name="filedata" /><br><br>
+        <input type="submit" value="Send" />
+    </form>
+</div>
+
+<script>
+    console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ))
+
+    ClassicEditor
+        .create( document.querySelector( '#editor' ), {
+            removePlugins: [ 'ImageUpload' ],
+            language: 'ru'
+        } )
+        .then( editor => {
+
+            editor.setData( '<p>Текст новости</p>' );
+
+            document.querySelector( '.submit-btn' ).addEventListener('click', () => {
+                const data = editor.getData();
+                console.log(data)
+
+            })
+
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+
+</body>
+</html>
