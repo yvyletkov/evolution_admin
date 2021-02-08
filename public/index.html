@@ -15,38 +15,17 @@
 <div class="container">
     <div id="editor"></div>
 
-    <button class="submit-btn">Сформировать</button>
-
     <form action="/upload" method="post" enctype="multipart/form-data">
-        <label>Файл</label><br>
+        <label>Выберите файл на превью</label><br>
         <input type="file" name="filedata" /><br><br>
-        <input type="submit" value="Send" />
+<!--        <input type="submit" value="Загрузить файл" />-->
     </form>
+
+    <button class="create-news-btn">Создать новость</button>
+
 </div>
 
-<script>
-    console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ))
-
-    ClassicEditor
-        .create( document.querySelector( '#editor' ), {
-            removePlugins: [ 'ImageUpload' ],
-            language: 'ru'
-        } )
-        .then( editor => {
-
-            editor.setData( '<p>Текст новости</p>' );
-
-            document.querySelector( '.submit-btn' ).addEventListener('click', () => {
-                const data = editor.getData();
-                console.log(data)
-
-            })
-
-        } )
-        .catch( error => {
-            console.error( error );
-        } );
-</script>
+<script src="scripts.js"></script>
 
 </body>
 </html>
