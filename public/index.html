@@ -15,17 +15,17 @@
 <div class="container">
     <div id="editor"></div>
 
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <label>Выберите файл на превью</label><br>
-        <input type="file" name="filedata" /><br><br>
-<!--        <input type="submit" value="Загрузить файл" />-->
+    <form id="image-upload-form">
+        <label>Изображение-превью для новости</label><br>
+        <input type="file" /><br><br>
+<!--        <input type="submit" value="Send" />-->
     </form>
 
-    <button class="create-news-btn">Создать новость</button>
-
+    <button class="submit-btn">Создать новость</button>
 </div>
 
 <script src="scripts.js"></script>
+
 
 </body>
 </html>

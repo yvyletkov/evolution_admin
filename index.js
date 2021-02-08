@@ -49,15 +49,18 @@ router.get('/home',function(req,res){
     res.sendFile(path.join(__dirname+'/public/index.html'));
 });
 
-router.post("/upload", upload.single("filedata"), function (req, res, next) {
+router.post("/upload", upload.any(), function (req, res, next) {
 
-    let filedata = req.file;
+    let filedata = req.files[0];
 
-    console.log(filedata);
-    if(!filedata)
+    console.log('filedata', filedata);
+
+    if(!filedata) {
+        console.log('ошибка')
         res.send("Ошибка при загрузке файла");
+    }
     else
-        res.send("Файл загружен");
+        res.send({path: filedata.path});
 });
 
 app.use(router);

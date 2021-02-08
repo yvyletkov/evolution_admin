@@ -1,6 +1,7 @@
 const newsModel = require('./models');
 
 module.exports.createNews = (req, res, next) => {
+    console.log('REQUEST', req.body)
     const { title, img, content } = req.body;
     newsModel.create({title, img, content})
         .then((newsItem) => {
@@ -16,3 +17,4 @@ module.exports.listNews = (req, res, next) => {
         })
         .catch(() => res.status(400));
 };
+
