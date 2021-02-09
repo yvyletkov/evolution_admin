@@ -54,16 +54,18 @@ router.get('/home',function(req,res){
 
 router.post("/upload", upload.any(), function (req, res, next) {
 
-    let filedata = req.files[0];
+    let previewImgData = req.files[0];
+    let mainImgData = req.files[1];
 
-    console.log('filedata', filedata);
-
-    if(!filedata) {
-        console.log('ошибка')
-        res.send("Ошибка при загрузке файла");
+    if(!previewImgData || !mainImgData) {
+        console.log('Ошибка')
+        res.send("");
     }
     else
-        res.send({path: filedata.path});
+        res.send([
+            {path: previewImgData.path},
+            {path: mainImgData.path},
+        ]);
 });
 
 app.use(router);

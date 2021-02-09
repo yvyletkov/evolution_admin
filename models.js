@@ -5,7 +5,11 @@ const evolutionNewsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    img: {
+    previewImg: {
+        type: String,
+        required: true
+    },
+    mainImg: {
         type: String,
         required: true
     },
