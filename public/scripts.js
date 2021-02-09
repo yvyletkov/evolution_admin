@@ -22,7 +22,7 @@ ClassicEditor
 
 
 const sendNewsItem = (contentData) => {
-    const img = document.querySelector('#image-upload-form input').files[0]
+    const img = document.querySelector('#img-input').files[0]
 
     // console.log('img', img)
 

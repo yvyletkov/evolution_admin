@@ -9,7 +9,9 @@ const multer = require("multer");
 
 const { PORT = 3000 } = process.env;
 
-app.listen(PORT);
+app.listen(PORT,() => {
+    console.log(`Сервер запущен, port ${PORT}`)
+});
 
 const fileFilter = (req, file, cb) => {
     if(file.mimetype === "image/png" ||
@@ -25,8 +27,9 @@ const storageConfig = multer.diskStorage({
     destination: (req, file, cb) =>{
         cb(null, "uploads");
     },
-    filename: (req, file, cb) =>{
-        cb(null, + Date.now() + '-' + file.originalname );
+    filename: (req, file, cb) => {
+        const fileName = (+ Date.now() + '-' + file.originalname)
+        cb(null, fileName.split(' ').join('_') );
     }
 });
 const upload = multer({storage: storageConfig, fileFilter: fileFilter});

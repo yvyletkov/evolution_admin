@@ -13,15 +13,17 @@
 <body>
 
 <div class="container">
+    <label for="title-input">Заголовок новости </label>
+    <input id='title-input' type="text"/>
+
+
     <div id="editor"></div>
 
-    <form id="image-upload-form">
-        <label>Изображение-превью для новости</label><br>
-        <input type="file" /><br><br>
-<!--        <input type="submit" value="Send" />-->
-    </form>
+    <label for="img-input"> Изображение для миниатюры (максимамальная ширина: 400px)</label>
 
-    <button class="submit-btn">Создать новость</button>
+    <input id='img-input' type="file"/>
+
+    <button class="submit-btn">Опубликовать новость</button>
 </div>
 
 <script src="scripts.js"></script>
