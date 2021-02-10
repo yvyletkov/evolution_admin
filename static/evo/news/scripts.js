@@ -1,3 +1,6 @@
+let serverURL = "http://localhost:3000/"
+
+
 window.onload = () => {
     document.querySelectorAll('#preview-img-input, #main-img-input').forEach((el) => el.addEventListener('change', function (el) {
             let value = this.value.split('\\');
@@ -6,6 +9,8 @@ window.onload = () => {
             el.target.nextSibling.nextElementSibling.innerHTML = fileName;
         })
     )
+
+    listNews()
 }
 
 ClassicEditor
@@ -21,7 +26,7 @@ ClassicEditor
         document.querySelector('#submit-btn').addEventListener('click', () => {
             const contentData = editor.getData();
             console.log(contentData)
-            sendNewsItem(contentData).then( (success) => {
+            createNewsItem(contentData).then( (success) => {
                 if (success) {
                     editor.setData('<p>Текст новости</p>');
                     document.querySelectorAll('input').forEach( (el) => el.value = null)
@@ -38,11 +43,45 @@ ClassicEditor
     });
 
 
-const sendNewsItem = async (contentData) => {
+const listNews = async () => {
+    const res = await fetch('/evo/news/list', {
+        method: "GET",
+    })
+
+    const data = await res.json()
+
+
+
+    data.forEach(function(item){
+
+        document.querySelector("#news-list-wrapper").insertAdjacentHTML('beforeend', `
+<div class="card mb-4" data-news-id="${item._id}">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
+            </div>
+            <div class="col-12 col-md-8">
+                <h4 class="m-0">${item.title}</h4>
+                <p>${item.content.slice(0, 150) + '...'}</p>
+                <button class="btn btn-primary mr-3">Редактировать новость</button>
+                <button class="btn btn-primary">Открыть новость на сайте</button>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+`);
+    })
+}
+
+
+const createNewsItem = async (contentData) => {
 
     const request = async (formData, contentData, titleText) => {
 
-        const res = await fetch('/upload', {method: "POST", body: formData})
+        const res = await fetch('/evo/news/upload-photos', {method: "POST", body: formData})
 
         if (res.status === 200) {
 
@@ -59,7 +98,7 @@ const sendNewsItem = async (contentData) => {
 
             console.log('newsItemData', newsItemData)
 
-            return await fetch('/', {
+            return await fetch('/evo/news/add', {
                 method: "POST",
                 body: newsItemData,
                 headers: {'Content-Type': "application/json"}
@@ -115,8 +154,6 @@ const sendNewsItem = async (contentData) => {
         })
         return false
     }
-
-
 
 }
 

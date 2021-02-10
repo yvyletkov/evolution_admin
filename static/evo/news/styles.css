@@ -1,0 +1,30 @@
+/*START BASIC STYLES*/
+.ck-content {
+    min-height: 200px;
+}
+
+.container {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 40px;
+}
+
+#title-input {
+    font-size: 16px !important;
+}
+
+.custom-file-input ~ .custom-file-label::after {
+    content: "Выбрать";
+}
+
+#editor + div {
+    margin-bottom: 3rem;
+}
+
+label.label-main {
+    font-size: 18px;
+}
+/*END BASIC STYLES*/
+

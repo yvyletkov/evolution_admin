@@ -11,29 +11,27 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/translations/ru.js"></script>
 
-    <title>Добавить новость - evolutionsport.ru</title>
+    <title>Изменить новость - evolutionsport.ru</title>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Админ-панель evolutionsport.ru</a>
+    <a class="navbar-brand" href="#">Админ-панель</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#">Features</a>
-            <a class="nav-item nav-link" href="#">Pricing</a>
-            <a class="nav-item nav-link disabled" href="#">Disabled</a>
+            <a class="nav-item nav-link cursor-pointer" href="/evo/news/add" id="create-news-item-link">Создать новость</a>
+            <a class="nav-item nav-link" href="/evo/news/" id="news-list-link">Список всех новостей</a>
         </div>
     </div>
 </nav>
 
-<div class="container">
-    <h3 class="mb-3 mt-3">Добавить новость на сайт EvolutionSport.ru</h3><br><br>
+<div class="container news-edit">
+    <h3 class="mb-3 mt-3">Изменить новость</h3><br><br>
     <label class="label-main" for="title-input">Заголовок новости</label>
-    <input id='title-input' placeholder="Введите заголовок" class="form-control input-main mb-5" type="text"/>
+    <input id="title-input" placeholder="Введите заголовок" class="form-control input-main mb-5" type="text"/>
 
     <label class="label-main">Контент</label>
     <div id="editor"></div>
@@ -50,10 +48,9 @@
         <label class="custom-file-label" for="main-img-input">Нажмите, чтобы выбрать основное изображение</label>
     </div>
 
-
-
-    <button id="submit-btn" class="btn  btn-success">Опубликовать новость</button>
+    <button id="submit-btn" class="btn btn-success">Опубликовать новость</button>
 </div>
+
 
 <script src="scripts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

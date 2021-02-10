@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const router = require('express').Router();
-const {createNews, listNews} = require('./controllers');
+const {createNewsItem, listNews, getNewsItem, updateNewsItem} = require('./controllers');
 const bodyParser = require('body-parser');
 const path = require('path');
 const multer = require("multer");
@@ -12,6 +12,32 @@ const { PORT = 3000 } = process.env;
 app.listen(PORT,() => {
     console.log(`Сервер запущен, port ${PORT}`)
 });
+
+mongoose.connect('mongodb://localhost:27017/newsdb', {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/static'));
+
+
+router.post('/evo/news/add', createNewsItem)
+router.get('/evo/news/list', listNews)
+router.post("/evo/news/get", getNewsItem)
+router.post("/evo/news/update", updateNewsItem)
+
+
+router.get('/evo/news/add',function(req, res){
+    res.sendFile(path.join(__dirname+'/static/evo/news/add.html'));
+});
+router.get('/evo/news',function(req, res){
+    res.sendFile(path.join(__dirname+'/static/evo/news/list.html'));
+});
+
 
 const fileFilter = (req, file, cb) => {
     if(file.mimetype === "image/png" ||
@@ -25,7 +51,7 @@ const fileFilter = (req, file, cb) => {
 }
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) =>{
-        cb(null, "uploads");
+        cb(null, "static/uploads");
     },
     filename: (req, file, cb) => {
         const fileName = (+ Date.now() + '-' + file.originalname)
@@ -33,26 +59,7 @@ const storageConfig = multer.diskStorage({
     }
 });
 const upload = multer({storage: storageConfig, fileFilter: fileFilter});
-
-mongoose.connect('mongodb://localhost:27017/newsdb', {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-});
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/public'));
-
-router.post('/', createNews)
-router.get('/', listNews)
-
-router.get('/home',function(req,res){
-    res.sendFile(path.join(__dirname+'/public/index.html'));
-});
-
-router.post("/upload", upload.any(), function (req, res, next) {
+router.post("/evo/news/upload-photos", upload.any(), function (req, res, next) {
 
     let previewImgData = req.files[0];
     let mainImgData = req.files[1];
@@ -63,9 +70,10 @@ router.post("/upload", upload.any(), function (req, res, next) {
     }
     else
         res.send([
-            {path: previewImgData.path},
-            {path: mainImgData.path},
+            {path: previewImgData.path.replace('static/', '')},
+            {path: mainImgData.path.replace('static/', '')},
         ]);
 });
+
 
 app.use(router);
