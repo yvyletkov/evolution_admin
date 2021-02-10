@@ -1,5 +1,14 @@
 let serverURL = "http://localhost:3000/"
+var EDITOR
 
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
 
 window.onload = () => {
     document.querySelectorAll('#preview-img-input, #main-img-input').forEach((el) => el.addEventListener('change', function (el) {
@@ -9,38 +18,33 @@ window.onload = () => {
             el.target.nextSibling.nextElementSibling.innerHTML = fileName;
         })
     )
-
-    listNews()
 }
 
-ClassicEditor
-    .create(document.querySelector('#editor'), {
-        removePlugins: ['ImageUpload'],
-        language: 'ru',
-        height: '300px'
-    })
-    .then(editor => {
-
-        editor.setData('<p>Текст новости</p>');
-
-        document.querySelector('#submit-btn').addEventListener('click', () => {
-            const contentData = editor.getData();
-            console.log(contentData)
-            createNewsItem(contentData).then( (success) => {
-                if (success) {
-                    editor.setData('<p>Текст новости</p>');
-                    document.querySelectorAll('input').forEach( (el) => el.value = null)
-                    document.querySelectorAll('#preview-img-input + label, #main-img-input + label').forEach( (el) => {
-                        el.innerHTML = 'Нажмите, чтобы выбрать'
-                    })
-                }
-            });
+window.addEventListener('load', async () => {
+    EDITOR = await ClassicEditor
+        .create(document.querySelector('#editor'), {
+            removePlugins: ['ImageUpload'],
+            language: 'ru',
+            height: '300px'
         })
 
+    EDITOR.setData('<p>Текст новости</p>');
+
+    document.querySelector('#submit-btn').addEventListener('click', () => {
+        const contentData = EDITOR.getData();
+        console.log(contentData)
+        createNewsItem(contentData).then( (success) => {
+            if (success) {
+                EDITOR.setData('<p>Текст новости</p>');
+                document.querySelectorAll('input').forEach( (el) => el.value = null)
+                document.querySelectorAll('#preview-img-input + label, #main-img-input + label').forEach( (el) => {
+                    el.innerHTML = 'Нажмите, чтобы выбрать'
+                })
+            }
+        });
     })
-    .catch(error => {
-        console.error(error);
-    });
+
+})
 
 
 const listNews = async () => {
@@ -55,27 +59,26 @@ const listNews = async () => {
     data.forEach(function(item){
 
         document.querySelector("#news-list-wrapper").insertAdjacentHTML('beforeend', `
-<div class="card mb-4" data-news-id="${item._id}">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12 col-md-4">
-                <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
+        <div class="card mb-4" data-news-id="${item._id}">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <h4 class="m-0">${item.title}</h4>
+                        <p>${item.content.slice(0, 150) + '...'}</p>
+                        <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mr-3">Редактировать новость</a>
+                        <a href="#" class="btn btn-outline-primary">Открыть новость на сайте</a>
+                    </div>
+                    
+                </div>
+                
             </div>
-            <div class="col-12 col-md-8">
-                <h4 class="m-0">${item.title}</h4>
-                <p>${item.content.slice(0, 150) + '...'}</p>
-                <button class="btn btn-primary mr-3">Редактировать новость</button>
-                <button class="btn btn-primary">Открыть новость на сайте</button>
-            </div>
-            
         </div>
-        
-    </div>
-</div>
-`);
+        `);
     })
 }
-
 
 const createNewsItem = async (contentData) => {
 
@@ -85,15 +88,15 @@ const createNewsItem = async (contentData) => {
 
         if (res.status === 200) {
 
-            const resJSON = await res.json()
+            const data = await res.json()
 
-            console.log('RESPONSE', resJSON)
+            console.log('RESPONSE', data)
 
             const newsItemData = JSON.stringify({
                 title: `${titleText}`,
                 content: `${contentData}`,
-                previewImg: `${resJSON[0].path}`,
-                mainImg: `${resJSON[1].path}`,
+                previewImg: `${data[0].path}`,
+                mainImg: `${data[1].path}`,
             })
 
             console.log('newsItemData', newsItemData)
@@ -154,6 +157,35 @@ const createNewsItem = async (contentData) => {
         })
         return false
     }
+
+}
+
+const fillInEditForm = async () => {
+    let id = getParameterByName('id')
+    const res = await fetch('/evo/news/get', {
+        method: "POST",
+        body: JSON.stringify({
+            id: `${id}`
+        }),
+        headers: {'Content-Type': "application/json"}
+    })
+    let data = await res.json();
+    console.log(data.title)
+
+    document.querySelector('#title-input').value = data.title;
+    EDITOR.setData(data.content);
+
+    document.querySelector('#main-img').src = `${serverURL}${data.mainImg}`
+    document.querySelector('#preview-img').src = `${serverURL}${data.previewImg}`
+
+    // <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
+
+
+    // function submitaftersetdata() {
+    //     this.updateElement();
+    // }
+    //
+    // CKEDITOR.instances[editorinstancename].setData(mynewhtml,submitaftersetdata);
 
 }
 

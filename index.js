@@ -37,6 +37,9 @@ router.get('/evo/news/add',function(req, res){
 router.get('/evo/news',function(req, res){
     res.sendFile(path.join(__dirname+'/static/evo/news/list.html'));
 });
+router.get('/evo/news/edit',function(req, res){
+    res.sendFile(path.join(__dirname+'/static/evo/news/edit.html'));
+});
 
 
 const fileFilter = (req, file, cb) => {

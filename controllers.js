@@ -19,6 +19,8 @@ module.exports.listNews = (req, res, next) => {
 };
 
 module.exports.getNewsItem = (req, res, next) => {
+    console.log(req.body)
+
     newsModel.findById(req.body.id)
         .then((newsItem) => {
             res.status(200).send(newsItem);

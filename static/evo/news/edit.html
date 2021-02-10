@@ -5,11 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/shards-ui@latest/dist/css/shards.min.css">
 
     <script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/translations/ru.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/shards-ui@latest/dist/js/shards.min.js"></script>
+
 
     <title>Изменить новость - evolutionsport.ru</title>
 </head>
@@ -17,12 +30,14 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Админ-панель</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link cursor-pointer" href="/evo/news/add" id="create-news-item-link">Создать новость</a>
+            <a class="nav-item nav-link cursor-pointer" href="/evo/news/add" id="create-news-item-link">Создать
+                новость</a>
             <a class="nav-item nav-link" href="/evo/news/" id="news-list-link">Список всех новостей</a>
         </div>
     </div>
@@ -36,28 +51,40 @@
     <label class="label-main">Контент</label>
     <div id="editor"></div>
 
-    <label class="label-main" for="preview-img-input">Изображение для миниатюры (максимамальная ширина: 400px)</label>
-    <div class="custom-file mb-4">
-        <input type="file" class="custom-file-input input-main" id="preview-img-input">
-        <label class="custom-file-label" for="preview-img-input">Нажмите, чтобы выбрать миниатюру</label>
+    <div class="row mb-5">
+        <div class="col-3">
+            <img id="main-img" class="edit-form-img" alt="Основное изображение">
+        </div>
+        <div class="col-9 d-flex flex-column justify-content-center">
+            <label class="label-main" for="main-img-input">Основное изображение (максимамальная ширина: 1000px)</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input input-main" id="main-img-input">
+                <label class="custom-file-label" for="main-img-input">Нажмите, чтобы выбрать миниатюру</label>
+            </div>
+        </div>
     </div>
 
-    <label class="label-main" for="main-img-input">Основное изображение (максимамальная ширина: 1000px)</label>
-    <div class="custom-file mb-5">
-        <input type="file" class="custom-file-input input-main" id="main-img-input">
-        <label class="custom-file-label" for="main-img-input">Нажмите, чтобы выбрать основное изображение</label>
+    <div class="row mb-5">
+        <div class="col-3">
+            <img id="preview-img" class="edit-form-img" alt="Миниатюра">
+        </div>
+        <div class="col-9 d-flex flex-column justify-content-center">
+            <label class="label-main" for="preview-img-input">Изображение для миниатюры (максимамальная ширина:
+                400px)</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input input-main" id="preview-img-input">
+                <label class="custom-file-label" for="preview-img-input">Нажмите, чтобы выбрать миниатюру</label>
+            </div>
+        </div>
     </div>
 
-    <button id="submit-btn" class="btn btn-success">Опубликовать новость</button>
+    <button id="submit-btn" class="btn btn-success">Опубликовать изменения</button>
 </div>
 
 
 <script src="scripts.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/shards-ui@latest/dist/js/shards.min.js"></script>
+<script>window.addEventListener('load', fillInEditForm) </script>
+
 
 </body>
 </html>
