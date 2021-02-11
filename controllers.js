@@ -36,3 +36,11 @@ module.exports.updateNewsItem = (req, res, next) => {
         .catch(() => res.status(400));
 };
 
+module.exports.deleteNewsItem = (req, res, next) => {
+    newsModel.findByIdAndDelete(req.body.id, req.body.update)
+        .then(() => {
+            res.status(200).send({status: 'Deleted successfully'});
+        })
+        .catch(() => res.status(400));
+};
+

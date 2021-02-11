@@ -30,6 +30,7 @@ window.addEventListener('load', async () => {
     )
 
     document.querySelector('#update-news-item-btn').addEventListener('click', updateNewsItem)
+
 })
 
 
@@ -55,7 +56,8 @@ const listNews = async () => {
                         <h4 class="m-0">${item.title}</h4>
                         <p>${item.content.slice(0, 150) + '...'}</p>
                         <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mr-3">Редактировать новость</a>
-                        <a href="#" class="btn btn-outline-primary">Открыть новость на сайте</a>
+                        <a href="#" class="btn btn-outline-primary mr-5">Открыть новость на сайте</a>
+                        <span data-news-id="${item._id}" class="btn btn-danger float-right delete-news-item-btn">Удалить новость</span>
                     </div>
                     
                 </div>
@@ -64,6 +66,9 @@ const listNews = async () => {
         </div>
         `);
     })
+
+    document.querySelectorAll('.delete-news-item-btn').forEach( el => el.addEventListener('click', deleteNewsItem) )
+
 }
 
 const loadCreateNewsForm = async () => {
@@ -169,7 +174,7 @@ const loadCreateNewsForm = async () => {
 }
 
 const fillInEditForm = async () => {
-    let id = getParameterByName('id')
+    const id = getParameterByName('id')
     const res = await fetch('/evo/news/get', {
         method: "POST",
         body: JSON.stringify({
@@ -291,3 +296,32 @@ const updateNewsItem = async () => {
 }
 
 
+const deleteNewsItem = async (e) => {
+
+    console.log(e.target.dataset.newsId)
+
+    const id = e.target.dataset.newsId
+
+    const res = await fetch('/evo/news/delete', {
+        method: "DELETE",
+        body: JSON.stringify({
+            id: `${id}`
+        }),
+        headers: {'Content-Type': "application/json"}
+    })
+
+    if (res.status === 200) {
+        Swal.fire({
+            title: 'Новость успешно удалена',
+            // text: 'И добавить оба изображения',
+            icon: 'success',
+            confirmButtonText: 'Ок'
+        })
+            .then( () => location.reload())
+    }
+
+    let data = await res.json();
+
+
+
+}

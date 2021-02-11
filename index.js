@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const router = require('express').Router();
-const {createNewsItem, listNews, getNewsItem, updateNewsItem} = require('./controllers');
+const {createNewsItem, listNews, getNewsItem, updateNewsItem, deleteNewsItem} = require('./controllers');
 const bodyParser = require('body-parser');
 const path = require('path');
 const multer = require("multer");
@@ -29,6 +29,7 @@ router.post('/evo/news/add', createNewsItem)
 router.get('/evo/news/list', listNews)
 router.post("/evo/news/get", getNewsItem)
 router.post("/evo/news/update", updateNewsItem)
+router.delete("/evo/news/delete", deleteNewsItem)
 
 
 router.get('/evo/news/add',function(req, res){
