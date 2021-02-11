@@ -69,7 +69,7 @@ router.post("/evo/news/upload-photos", upload.any(), function (req, res, next) {
 
     if(!imgData) {
         console.log('Images upload error')
-        res.send('Images upload error');
+        res.send(400);
     }
     else
         res.send([

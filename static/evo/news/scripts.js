@@ -28,6 +28,8 @@ window.addEventListener('load', async () => {
             el.target.nextSibling.nextElementSibling.innerHTML = fileName;
         })
     )
+
+    document.querySelector('#update-news-item-btn').addEventListener('click', updateNewsItem)
 })
 
 
@@ -193,31 +195,63 @@ const updateNewsItem = async () => {
     const previewImg = document.querySelector('#preview-img-input').files[0]
     const mainImg = document.querySelector('#main-img-input').files[0]
 
-    if ((previewImg !== undefined || mainImg !== undefined) && titleText) {
+    if ( titleText) {
 
-        const formData = new FormData();
-        if(previewImg) formData.append("preview-img", previewImg);
-        if(mainImg) formData.append("main-img", mainImg);
+        let previewImageUploadRes;
+        let mainImageUploadRes;
 
-        const imageUploadRes = await fetch('/evo/news/upload-photos', {method: "POST", body: formData})
+        if(previewImg) {
+            const formData = new FormData();
+            formData.append("preview-img", previewImg);
+            previewImageUploadRes = await fetch('/evo/news/upload-photos', {method: "POST", body: formData})
+        }
+        if(mainImg) {
+            const formData = new FormData();
+            formData.append("main-img", mainImg);
+            mainImageUploadRes = await fetch('/evo/news/upload-photos', {method: "POST", body: formData})
+        }
 
-        if (imageUploadRes.status === 200) {
+        console.log('preview', previewImageUploadRes)
+        console.log('main', mainImageUploadRes)
 
-            const data = await imageUploadRes.json()
+        if ( (previewImg && previewImageUploadRes.status !== 200) || (mainImageUploadRes && mainImageUploadRes.status !== 200) ) {
 
-            console.log('RESPONSE', data)
+            Swal.fire({
+                title: 'Произошла ошибка при отправке изображений :(',
+                text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
+                icon: 'error',
+                confirmButtonText: 'Ладно'
+            })
 
-            const requestBody = {
+        }
+        else {
+            let previewImageData, mainImageData;
+
+            let requestBody = {
                 id: getParameterByName('id'),
                 update: {
                     title: `${titleText}`,
                     content: `${contentData}`,
-                    previewImg: `${data[0].path}`,
-                    mainImg: `${data[1].path}`,
                 }
             }
 
-            // if
+            if (previewImg) {
+                previewImageData = await previewImageUploadRes.json();
+                requestBody.update = {
+                    ...requestBody.update,
+                    previewImg: `${previewImageData[0].path}`,
+                }
+            }
+
+            if (mainImg) {
+                mainImageData = await mainImageUploadRes.json();
+                requestBody.update = {
+                    ...requestBody.update,
+                    mainImg: `${mainImageData[0].path}`,
+                }
+            }
+
+            console.log('IMAGES DATA', previewImageData, mainImageData);
 
             const res = await fetch('/evo/news/update', {
                 method: "POST",
@@ -225,56 +259,35 @@ const updateNewsItem = async () => {
                 headers: {'Content-Type': "application/json"}
             })
 
-            if (res.status === 201) {
+            if (res.status === 200) {
                 Swal.fire({
-                    title: 'Новость опубликована',
+                    title: 'Новость обновлена',
                     icon: 'success',
-                    confirmButtonText: 'Отлично'
-                })
-                return true
+                    confirmButtonText: 'Отлично',
+                }).then( () => location.reload())
             }
             else {
                 Swal.fire({
                     title: 'Произошла ошибка :(',
                     text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
                     icon: 'error',
-                    confirmButtonText: 'Ладно'
+                    confirmButtonText: 'Ладно',
                 })
-                return false
             }
 
         }
-
-        else {
-            Swal.fire({
-                title: 'Произошла ошибка при отправке изображений :(',
-                text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
-                icon: 'error',
-                confirmButtonText: 'Ладно'
-            })
-            return false
-        }
-
 
 
     }
     else {
         Swal.fire({
-            title: 'Необходимо заполнить все поля и добавить оба изображения :(',
+            title: 'Необходимо указать заголовок новости',
             // text: 'И добавить оба изображения',
             icon: 'error',
             confirmButtonText: 'Ок'
         })
-        return false
     }
 
-
-
-    const res = await fetch('/evo/news/update', {
-        method: "POST",
-        body: newsItemData,
-        headers: {'Content-Type': "application/json"}
-    })
 }
 
 
