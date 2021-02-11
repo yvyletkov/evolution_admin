@@ -64,17 +64,16 @@ const storageConfig = multer.diskStorage({
 const upload = multer({storage: storageConfig, fileFilter: fileFilter});
 router.post("/evo/news/upload-photos", upload.any(), function (req, res, next) {
 
-    let previewImgData = req.files[0];
-    let mainImgData = req.files[1];
+    console.log('ФАЙЛЫ', req.files)
+    let imgData = req.files[0];
 
-    if(!previewImgData || !mainImgData) {
-        console.log('Ошибка')
-        res.send("");
+    if(!imgData) {
+        console.log('Images upload error')
+        res.send('Images upload error');
     }
     else
         res.send([
-            {path: previewImgData.path.replace('static/', '')},
-            {path: mainImgData.path.replace('static/', '')},
+            {path: imgData.path.replace('static/', '')},
         ]);
 });
 

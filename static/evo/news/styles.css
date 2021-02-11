@@ -31,10 +31,11 @@ label.label-main {
     display: block;
     width: 100%;
     height: 100px;
+    border-radius: 5px;
     object-fit: cover;
-    box-shadow: 1px 0px 19px -1px rgba(0,0,0,0.18);
-    -webkit-box-shadow: 1px 0px 19px -1px rgba(0,0,0,0.18);
-    -moz-box-shadow: 1px 0px 19px -1px rgba(0,0,0,0.18);
+    box-shadow: 1px 0px 19px -1px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 1px 0px 19px -1px rgba(0,0,0,0.1);
+    -moz-box-shadow: 1px 0px 19px -1px rgba(0,0,0,0.1);
 }
 /*END BASIC STYLES*/
 

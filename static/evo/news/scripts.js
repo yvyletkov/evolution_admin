@@ -1,5 +1,5 @@
 let serverURL = "http://localhost:3000/"
-var EDITOR
+var EDITOR;
 
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -10,17 +10,8 @@ function getParameterByName(name, url = window.location.href) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-window.onload = () => {
-    document.querySelectorAll('#preview-img-input, #main-img-input').forEach((el) => el.addEventListener('change', function (el) {
-            let value = this.value.split('\\');
-            let fileName = value[value.length - 1]
-            console.log('value', this)
-            el.target.nextSibling.nextElementSibling.innerHTML = fileName;
-        })
-    )
-}
-
 window.addEventListener('load', async () => {
+
     EDITOR = await ClassicEditor
         .create(document.querySelector('#editor'), {
             removePlugins: ['ImageUpload'],
@@ -30,20 +21,13 @@ window.addEventListener('load', async () => {
 
     EDITOR.setData('<p>Текст новости</p>');
 
-    document.querySelector('#submit-btn').addEventListener('click', () => {
-        const contentData = EDITOR.getData();
-        console.log(contentData)
-        createNewsItem(contentData).then( (success) => {
-            if (success) {
-                EDITOR.setData('<p>Текст новости</p>');
-                document.querySelectorAll('input').forEach( (el) => el.value = null)
-                document.querySelectorAll('#preview-img-input + label, #main-img-input + label').forEach( (el) => {
-                    el.innerHTML = 'Нажмите, чтобы выбрать'
-                })
-            }
-        });
-    })
-
+    document.querySelectorAll('#preview-img-input, #main-img-input').forEach((el) => el.addEventListener('change', function (el) {
+            let value = this.value.split('\\');
+            let fileName = value[value.length - 1]
+            console.log('value', this)
+            el.target.nextSibling.nextElementSibling.innerHTML = fileName;
+        })
+    )
 })
 
 
@@ -80,83 +64,105 @@ const listNews = async () => {
     })
 }
 
-const createNewsItem = async (contentData) => {
+const loadCreateNewsForm = async () => {
 
-    const request = async (formData, contentData, titleText) => {
+    document.querySelector('#submit-btn').addEventListener('click', async () => {
+        const res = await createNewsItem();
 
-        const res = await fetch('/evo/news/upload-photos', {method: "POST", body: formData})
-
-        if (res.status === 200) {
-
-            const data = await res.json()
-
-            console.log('RESPONSE', data)
-
-            const newsItemData = JSON.stringify({
-                title: `${titleText}`,
-                content: `${contentData}`,
-                previewImg: `${data[0].path}`,
-                mainImg: `${data[1].path}`,
+        if (res) {
+            EDITOR.setData('<p>Текст новости</p>');
+            document.querySelectorAll('input').forEach( (el) => el.value = null)
+            document.querySelectorAll('#preview-img-input + label, #main-img-input + label').forEach( (el) => {
+                el.innerHTML = 'Нажмите, чтобы выбрать'
             })
-
-            console.log('newsItemData', newsItemData)
-
-            return await fetch('/evo/news/add', {
-                method: "POST",
-                body: newsItemData,
-                headers: {'Content-Type': "application/json"}
-            })
-
         }
-
-        else return false
-
-    }
-
-    const previewImg = document.querySelector('#preview-img-input').files[0]
-    const mainImg = document.querySelector('#main-img-input').files[0]
-    const titleText = document.querySelector('#title-input').value
+    })
 
 
-    if ((previewImg !== undefined && mainImg !== undefined) && titleText) {
+    const createNewsItem = async () => {
 
-        const formData = new FormData();
+        const contentData = EDITOR.getData();
+        const titleText = document.querySelector('#title-input').value
+        const previewImg = document.querySelector('#preview-img-input').files[0]
+        const mainImg = document.querySelector('#main-img-input').files[0]
 
-        formData.append("preview-img", previewImg);
-        formData.append("main-img", mainImg);
+        if ((previewImg !== undefined && mainImg !== undefined) && titleText) {
 
-        const res = await request(formData, contentData, titleText);
+            const previewImgFormData = new FormData();
+            previewImgFormData.append("preview-img", previewImg);
+            const previewImgUploadRes = await fetch('/evo/news/upload-photos', {method: "POST", body: previewImgFormData})
 
-        console.log('OTVET', res)
+            const mainImgFormData = new FormData();
+            mainImgFormData.append("main-img", mainImg);
+            const mainImgUploadRes = await fetch('/evo/news/upload-photos', {method: "POST", body: mainImgFormData})
 
-        if (res.status === 201) {
-            Swal.fire({
-                title: 'Новость опубликована',
-                icon: 'success',
-                confirmButtonText: 'Отлично'
-            })
-            return true
+
+            if ((previewImgUploadRes.status === 200) && (mainImgUploadRes.status === 200)) {
+
+                const previewImgData = await previewImgUploadRes.json()
+                const mainImgData = await mainImgUploadRes.json()
+
+                const newsItemData = JSON.stringify({
+                    title: `${titleText}`,
+                    content: `${contentData}`,
+                    previewImg: `${previewImgData[0].path}`,
+                    mainImg: `${mainImgData[0].path}`,
+                })
+
+                console.log('newsItemData', newsItemData)
+
+                const res = await fetch('/evo/news/add', {
+                    method: "POST",
+                    body: newsItemData,
+                    headers: {'Content-Type': "application/json"}
+                })
+
+                if (res.status === 201) {
+                    Swal.fire({
+                        title: 'Новость опубликована',
+                        icon: 'success',
+                        confirmButtonText: 'Отлично'
+                    })
+                    return true
+                }
+                else {
+                    Swal.fire({
+                        title: 'Произошла ошибка :(',
+                        text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
+                        icon: 'error',
+                        confirmButtonText: 'Ладно'
+                    })
+                    return false
+                }
+
+            }
+
+            else {
+                Swal.fire({
+                    title: 'Произошла ошибка при отправке изображений :(',
+                    text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
+                    icon: 'error',
+                    confirmButtonText: 'Ладно'
+                })
+                return false
+            }
+
+
+
         }
         else {
             Swal.fire({
-                title: 'Произошла ошибка :(',
-                text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
+                title: 'Необходимо заполнить все поля и добавить оба изображения :(',
+                // text: 'И добавить оба изображения',
                 icon: 'error',
-                confirmButtonText: 'Ладно'
+                confirmButtonText: 'Ок'
             })
             return false
         }
 
+
     }
-    else {
-        Swal.fire({
-            title: 'Необходимо заполнить все поля и добавить оба изображения :(',
-            // text: 'И добавить оба изображения',
-            icon: 'error',
-            confirmButtonText: 'Ок'
-        })
-        return false
-    }
+
 
 }
 
@@ -178,15 +184,97 @@ const fillInEditForm = async () => {
     document.querySelector('#main-img').src = `${serverURL}${data.mainImg}`
     document.querySelector('#preview-img').src = `${serverURL}${data.previewImg}`
 
-    // <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
+}
+
+const updateNewsItem = async () => {
+
+    const contentData = EDITOR.getData();
+    const titleText = document.querySelector('#title-input').value
+    const previewImg = document.querySelector('#preview-img-input').files[0]
+    const mainImg = document.querySelector('#main-img-input').files[0]
+
+    if ((previewImg !== undefined || mainImg !== undefined) && titleText) {
+
+        const formData = new FormData();
+        if(previewImg) formData.append("preview-img", previewImg);
+        if(mainImg) formData.append("main-img", mainImg);
+
+        const imageUploadRes = await fetch('/evo/news/upload-photos', {method: "POST", body: formData})
+
+        if (imageUploadRes.status === 200) {
+
+            const data = await imageUploadRes.json()
+
+            console.log('RESPONSE', data)
+
+            const requestBody = {
+                id: getParameterByName('id'),
+                update: {
+                    title: `${titleText}`,
+                    content: `${contentData}`,
+                    previewImg: `${data[0].path}`,
+                    mainImg: `${data[1].path}`,
+                }
+            }
+
+            // if
+
+            const res = await fetch('/evo/news/update', {
+                method: "POST",
+                body: JSON.stringify(requestBody),
+                headers: {'Content-Type': "application/json"}
+            })
+
+            if (res.status === 201) {
+                Swal.fire({
+                    title: 'Новость опубликована',
+                    icon: 'success',
+                    confirmButtonText: 'Отлично'
+                })
+                return true
+            }
+            else {
+                Swal.fire({
+                    title: 'Произошла ошибка :(',
+                    text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
+                    icon: 'error',
+                    confirmButtonText: 'Ладно'
+                })
+                return false
+            }
+
+        }
+
+        else {
+            Swal.fire({
+                title: 'Произошла ошибка при отправке изображений :(',
+                text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
+                icon: 'error',
+                confirmButtonText: 'Ладно'
+            })
+            return false
+        }
 
 
-    // function submitaftersetdata() {
-    //     this.updateElement();
-    // }
-    //
-    // CKEDITOR.instances[editorinstancename].setData(mynewhtml,submitaftersetdata);
 
+    }
+    else {
+        Swal.fire({
+            title: 'Необходимо заполнить все поля и добавить оба изображения :(',
+            // text: 'И добавить оба изображения',
+            icon: 'error',
+            confirmButtonText: 'Ок'
+        })
+        return false
+    }
+
+
+
+    const res = await fetch('/evo/news/update', {
+        method: "POST",
+        body: newsItemData,
+        headers: {'Content-Type': "application/json"}
+    })
 }
 
 
