@@ -6,6 +6,8 @@ const {createNewsItem, listNews, getNewsItem, updateNewsItem, deleteNewsItem} = 
 const bodyParser = require('body-parser');
 const path = require('path');
 const multer = require("multer");
+const cors = require('cors')
+
 
 const { PORT = 3000 } = process.env;
 
@@ -23,6 +25,7 @@ mongoose.connect('mongodb://localhost:27017/newsdb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/static'));
+app.use(cors())
 
 
 router.post('/evo/news/add', createNewsItem)
