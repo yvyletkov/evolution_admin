@@ -1,4 +1,4 @@
-let serverURL = "http://localhost:3000/"
+let serverURL = "https://evo-dashboard.ml/"
 var EDITOR;
 
 function getParameterByName(name, url = window.location.href) {
