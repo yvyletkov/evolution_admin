@@ -9,7 +9,7 @@ const multer = require("multer");
 const cors = require('cors')
 
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3333 } = process.env;
 
 app.listen(PORT,() => {
     console.log(`Сервер запущен, port ${PORT}`)
