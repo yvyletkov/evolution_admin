@@ -1,5 +1,5 @@
 let serverURL = "https://evo-dashboard.ml/"
-var EDITOR;
+// let serverURL = "http://localhost:3000/"
 
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -49,15 +49,15 @@ const listNews = async () => {
         <div class="card mb-4" data-news-id="${item._id}">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-4 mb-4 mb-md-0">
                         <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
                     </div>
                     <div class="col-12 col-md-8">
                         <h4 class="m-0">${item.title}</h4>
-                        <p>${item.content.slice(0, 150) + '...'}</p>
-                        <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mr-3">Редактировать новость</a>
-                        <a href="#" class="btn btn-outline-primary mr-5">Открыть новость на сайте</a>
-                        <span data-news-id="${item._id}" class="btn btn-danger float-right delete-news-item-btn">Удалить новость</span>
+                        <p>${item.content.slice(0, 200) + '...'}</p>
+                        <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mr-3 mb-3 mb-lg-0">Редактировать новость</a>
+                        <a href="#" class="btn btn-outline-primary mr-5 mb-3 mb-lg-0">Открыть новость на сайте</a>
+                        <span data-news-id="${item._id}" class="btn btn-danger float-lg-right delete-news-item-btn">Удалить новость</span>
                     </div>
                     
                 </div>
