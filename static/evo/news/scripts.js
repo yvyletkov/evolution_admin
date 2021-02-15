@@ -315,29 +315,37 @@ const updateNewsItem = async () => {
 
 const deleteNewsItem = async (e) => {
 
-    console.log(e.target.dataset.newsId)
+    Swal.fire({
+        title: 'Точно удалить новость?',
+        text: 'Восстановить ее будет невозможно',
+        icon: 'warning',
+        confirmButtonText: 'Удалить',
+        showCancelButton: true,
+        cancelButtonText: 'Отмена'
+    }).then( async (result) => {
+        if (result.isConfirmed) {
 
-    const id = e.target.dataset.newsId
+            const id = e.target.dataset.newsId
+            const res = await fetch('/evo/news/delete', {
+                method: "DELETE",
+                body: JSON.stringify({
+                    id: `${id}`
+                }),
+                headers: {'Content-Type': "application/json"}
+            })
+            if (res.status === 200) {
+                Swal.fire({
+                    title: 'Новость успешно удалена',
+                    // text: 'И добавить оба изображения',
+                    icon: 'success',
+                    confirmButtonText: 'Ок'
+                })
+                    .then( () => location.reload())
+            }
+            let data = await res.json();
 
-    const res = await fetch('/evo/news/delete', {
-        method: "DELETE",
-        body: JSON.stringify({
-            id: `${id}`
-        }),
-        headers: {'Content-Type': "application/json"}
+        }
     })
-
-    if (res.status === 200) {
-        Swal.fire({
-            title: 'Новость успешно удалена',
-            // text: 'И добавить оба изображения',
-            icon: 'success',
-            confirmButtonText: 'Ок'
-        })
-            .then( () => location.reload())
-    }
-
-    let data = await res.json();
 
 }
 
