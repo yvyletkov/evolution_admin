@@ -48,7 +48,7 @@ const listNews = async () => {
 
         document.querySelector("#news-list-wrapper").insertAdjacentHTML('beforeend', `
         <div class="card mb-4" data-news-id="${item._id}" >
-            <div class="card-body" ${item.unactive === 'true' ? 'style="opacity: 0.4"' : ''}>
+            <div class="card-body" ${item.unactive === 'true' ? 'style="opacity: 0.5"' : ''}>
                 <div class="row">
                     <div style="position:absolute;top:20px;right: 30px;font-size: 13px;color:#a0a0a0">
                         ${item.unactive === 'true' ? 'Новость неактивна' : 'Новость активна'}
@@ -200,6 +200,7 @@ const fillInEditForm = async () => {
     console.log(data.title)
 
     document.querySelector('#title-input').value = data.title;
+    document.querySelector('#link-input').value = data.link || "";
     EDITOR.setData(data.content);
 
     document.querySelector('#main-img').src = `${serverURL}${data.mainImg}`
@@ -211,6 +212,7 @@ const updateNewsItem = async () => {
 
     const contentData = EDITOR.getData();
     const titleText = document.querySelector('#title-input').value
+    const link = document.querySelector('#link-input').value
     const previewImg = document.querySelector('#preview-img-input').files[0]
     const mainImg = document.querySelector('#main-img-input').files[0]
 
@@ -251,6 +253,7 @@ const updateNewsItem = async () => {
                 update: {
                     title: `${titleText}`,
                     content: `${contentData}`,
+                    link: link || ''
                 }
             }
 
