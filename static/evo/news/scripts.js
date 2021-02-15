@@ -47,8 +47,6 @@ const listNews = async () => {
 
     const data = await res.json()
 
-
-
     data.forEach(function(item){
 
         document.querySelector("#news-list-wrapper").insertAdjacentHTML('beforeend', `
@@ -63,7 +61,7 @@ const listNews = async () => {
                     </div>
                     <div class="col-12 col-md-8">
                         <h4 class="m-0">${item.title}</h4>
-                        <p class="mt-4">${cutTags(item.content).slice(0, 200) + '...'}</p>
+                        <p class="mt-4">${item.content ? (cutTags(item.content).slice(0, 200) + '...') : item.link}</p>
                         <div class="d-flex justify-content-between" style="flex-wrap: wrap">
                             <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mx-2 mb-3 mb-lg-0 ml-lg-0">Редактировать новость</a>
                             <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mx-2 mb-3 mb-lg-0">Открыть на сайте</a>
@@ -185,7 +183,6 @@ const loadCreateNewsForm = async () => {
             })
             return false
         }
-
 
     }
 

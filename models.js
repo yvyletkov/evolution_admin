@@ -15,7 +15,7 @@ const evolutionNewsSchema = new mongoose.Schema({
     },
     content: {
         type: String,
-        required: true,
+        required: false,
     },
     link: {
         type: String,
