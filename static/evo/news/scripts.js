@@ -51,7 +51,7 @@ const listNews = async () => {
             <div class="card-body" ${item.unactive === 'true' ? 'style="opacity: 0.5"' : ''}>
                 <div class="row">
                     <div style="position:absolute;top:20px;right: 30px;font-size: 13px;color:#a0a0a0">
-                        ${item.unactive === 'true' ? 'Новость неактивна' : 'Новость активна'}
+                        ${item.unactive === 'true' ? 'Неактивна' : 'Активна'}
                     </div>
                     <div class="col-12 col-md-4 mb-4 mb-md-0 mt-4 mt-md-0">
                         <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
@@ -64,8 +64,8 @@ const listNews = async () => {
                             <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mx-2 mb-3 mb-lg-0">Открыть новость на сайте</a>
                             <span data-news-id="${item._id}" class="btn btn-danger float-lg-right delete-news-item-btn mx-2 mb-3 mb-lg-0 mr-lg-0">Удалить новость</span>
                             ${item.unactive === 'true' ?
-                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 activate-news-item-btn mb-3 mb-lg-0">Сделать активной</span>` :
-                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 deactivate-news-item-btn mb-3 mb-lg-0">Скрыть новость</span>`}
+                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 activate-news-item-btn mb-3 mb-lg-0">Активировать</span>` :
+                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 deactivate-news-item-btn mb-3 mb-lg-0">Скрыть</span>`}
                         </div>
 
                     </div>
