@@ -61,7 +61,7 @@ const listNews = async () => {
                     </div>
                     <div class="col-12 col-md-8">
                         <h4 class="m-0 mt-4">${item.title}</h4>
-                        <p class="mt-4">${item.content ? (cutTags(item.content).slice(0, 200) + '...') : item.link}</p>
+                        <p class="mt-4">${item.content ? (cutTags(item.content).slice(0, 130) + '...') : item.link}</p>
                         <div class="btn-group" style="flex-wrap: wrap" role="group" aria-label="Basic example">
                             <a href="/evo/news/edit?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0 ml-lg-0">Редактировать</a>
                             <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0">Открыть на сайте</a>
