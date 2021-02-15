@@ -37,5 +37,15 @@ label.label-main {
     -webkit-box-shadow: 1px 0px 19px -1px rgba(0,0,0,0.1);
     -moz-box-shadow: 1px 0px 19px -1px rgba(0,0,0,0.1);
 }
+
+.btn-group .btn {
+    font-size: 11px !important;
+}
+
+@media (max-width: 600px) {
+    .btn-group .btn {
+        font-size: 9px !important;
+    }
+}
 /*END BASIC STYLES*/
 

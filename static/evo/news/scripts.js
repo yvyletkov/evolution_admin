@@ -62,13 +62,13 @@ const listNews = async () => {
                     <div class="col-12 col-md-8">
                         <h4 class="m-0">${item.title}</h4>
                         <p class="mt-4">${item.content ? (cutTags(item.content).slice(0, 200) + '...') : item.link}</p>
-                        <div class="d-flex justify-content-between" style="flex-wrap: wrap">
-                            <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mx-2 mb-3 mb-lg-0 ml-lg-0">Редактировать новость</a>
-                            <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mx-2 mb-3 mb-lg-0">Открыть на сайте</a>
-                            <span data-news-id="${item._id}" class="btn btn-danger float-lg-right delete-news-item-btn mx-2 mb-3 mb-lg-0 mr-lg-0">Удалить новость</span>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="/evo/news/edit?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0 ml-lg-0">Редактировать</a>
+                            <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0">Открыть на сайте</a>
                             ${item.unactive === 'true' ?
-                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 activate-news-item-btn mb-3 mb-lg-0">Активировать новость</span>` :
-                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 deactivate-news-item-btn mb-3 mb-lg-0">Скрыть новость</span>`}
+                                `<span data-news-id="${item._id}" class="btn btn-outline-primary float-lg-right activate-news-item-btn mb-3 mb-lg-0">Активировать</span>` :
+                                `<span data-news-id="${item._id}" class="btn btn-outline-primary float-lg-right deactivate-news-item-btn mb-3 mb-lg-0">Скрыть</span>`}
+                            <span data-news-id="${item._id}" class="btn btn-outline-danger float-lg-right delete-news-item-btn mb-3 mb-lg-0 mr-lg-0">Удалить</span>
                         </div>
 
                     </div>
