@@ -51,7 +51,7 @@ const listNews = async () => {
             <div class="card-body" ${item.unactive === 'true' ? 'style="opacity: 0.5"' : ''}>
                 <div class="row">
                     <div style="position:absolute;top:20px;right: 30px;font-size: 13px;color:#a0a0a0">
-                        ${item.unactive === 'true' ? 'Неактивна' : 'Активна'}
+                        ${item.unactive === 'true' ? 'Новость скрыта' : 'Новость активна'}
                     </div>
                     <div class="col-12 col-md-4 mb-4 mb-md-0 mt-4 mt-md-0">
                         <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
@@ -61,11 +61,11 @@ const listNews = async () => {
                         <p>${item.content.slice(0, 200) + '...'}</p>
                         <div class="d-flex justify-content-between" style="flex-wrap: wrap">
                             <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mx-2 mb-3 mb-lg-0 ml-lg-0">Редактировать новость</a>
-                            <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mx-2 mb-3 mb-lg-0">Открыть новость на сайте</a>
+                            <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mx-2 mb-3 mb-lg-0">Открыть на сайте</a>
                             <span data-news-id="${item._id}" class="btn btn-danger float-lg-right delete-news-item-btn mx-2 mb-3 mb-lg-0 mr-lg-0">Удалить новость</span>
                             ${item.unactive === 'true' ?
-                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 activate-news-item-btn mb-3 mb-lg-0">Активировать</span>` :
-                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 deactivate-news-item-btn mb-3 mb-lg-0">Скрыть</span>`}
+                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 activate-news-item-btn mb-3 mb-lg-0">Активировать новость</span>` :
+                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 deactivate-news-item-btn mb-3 mb-lg-0">Скрыть новость</span>`}
                         </div>
 
                     </div>
