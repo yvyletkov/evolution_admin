@@ -1,5 +1,6 @@
 let serverURL = "https://evo-dashboard.ml/"
-// let serverURL = "http://localhost:3000/"
+// let serverURL = "http://localhost:3333/";
+let websiteURL = "https://evolutionsport.ru/new/"
 
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -46,18 +47,27 @@ const listNews = async () => {
     data.forEach(function(item){
 
         document.querySelector("#news-list-wrapper").insertAdjacentHTML('beforeend', `
-        <div class="card mb-4" data-news-id="${item._id}">
-            <div class="card-body">
+        <div class="card mb-4" data-news-id="${item._id}" >
+            <div class="card-body" ${item.unactive === 'true' ? 'style="opacity: 0.4"' : ''}>
                 <div class="row">
-                    <div class="col-12 col-md-4 mb-4 mb-md-0">
+                    <div style="position:absolute;top:20px;right: 30px;font-size: 13px;color:#a0a0a0">
+                        ${item.unactive === 'true' ? 'Новость неактивна' : 'Новость активна'}
+                    </div>
+                    <div class="col-12 col-md-4 mb-4 mb-md-0 mt-4 mt-md-0">
                         <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
                     </div>
                     <div class="col-12 col-md-8">
                         <h4 class="m-0">${item.title}</h4>
                         <p>${item.content.slice(0, 200) + '...'}</p>
-                        <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mr-3 mb-3 mb-lg-0">Редактировать новость</a>
-                        <a href="#" class="btn btn-outline-primary mr-5 mb-3 mb-lg-0">Открыть новость на сайте</a>
-                        <span data-news-id="${item._id}" class="btn btn-danger float-lg-right delete-news-item-btn">Удалить новость</span>
+                        <div class="d-flex justify-content-between" style="flex-wrap: wrap">
+                            <a href="/evo/news/edit?id=${item._id}" class="btn btn-primary mx-2 mb-3 mb-lg-0 ml-lg-0">Редактировать новость</a>
+                            <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mx-2 mb-3 mb-lg-0">Открыть новость на сайте</a>
+                            <span data-news-id="${item._id}" class="btn btn-danger float-lg-right delete-news-item-btn mx-2 mb-3 mb-lg-0 mr-lg-0">Удалить новость</span>
+                            ${item.unactive === 'true' ?
+                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 activate-news-item-btn mb-3 mb-lg-0">Сделать активной</span>` :
+                                `<span data-news-id="${item._id}" class="btn btn-outline-secondary float-lg-right mx-2 deactivate-news-item-btn mb-3 mb-lg-0">Скрыть новость</span>`}
+                        </div>
+
                     </div>
                     
                 </div>
@@ -68,6 +78,8 @@ const listNews = async () => {
     })
 
     document.querySelectorAll('.delete-news-item-btn').forEach( el => el.addEventListener('click', deleteNewsItem) )
+    document.querySelectorAll('.activate-news-item-btn').forEach( el => el.addEventListener('click', activateNewsItem) )
+    document.querySelectorAll('.deactivate-news-item-btn').forEach( el => el.addEventListener('click', deactivateNewsItem) )
 
 }
 
@@ -92,6 +104,7 @@ const loadCreateNewsForm = async () => {
         const titleText = document.querySelector('#title-input').value
         const previewImg = document.querySelector('#preview-img-input').files[0]
         const mainImg = document.querySelector('#main-img-input').files[0]
+        const link = document.querySelector('#link-input').value || '';
 
         if ((previewImg !== undefined && mainImg !== undefined) && titleText) {
 
@@ -114,6 +127,7 @@ const loadCreateNewsForm = async () => {
                     content: `${contentData}`,
                     previewImg: `${previewImgData[0].path}`,
                     mainImg: `${mainImgData[0].path}`,
+                    link: link
                 })
 
                 console.log('newsItemData', newsItemData)
@@ -200,7 +214,7 @@ const updateNewsItem = async () => {
     const previewImg = document.querySelector('#preview-img-input').files[0]
     const mainImg = document.querySelector('#main-img-input').files[0]
 
-    if ( titleText) {
+    if (titleText) {
 
         let previewImageUploadRes;
         let mainImageUploadRes;
@@ -322,6 +336,69 @@ const deleteNewsItem = async (e) => {
 
     let data = await res.json();
 
+}
 
+const activateNewsItem = async (e) => {
+    const id = e.target.dataset.newsId
+
+    let requestBody = {
+        id: id,
+        update: {
+            unactive: `false`,
+        }
+    }
+
+    const res = await fetch('/evo/news/update', {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {'Content-Type': "application/json"}
+    })
+
+    if (res.status === 200) {
+        Swal.fire({
+            title: 'Новость успешно активирована',
+            // text: 'И добавить оба изображения',
+            icon: 'success',
+            confirmButtonText: 'Ок'
+        })
+            .then( () => location.reload())
+    }
+    else Swal.fire({
+        title: 'Ошибка при попытке активировать новость',
+        icon: 'error',
+        confirmButtonText: 'Ок'
+    })
+
+}
+
+const deactivateNewsItem = async (e) => {
+    const id = e.target.dataset.newsId
+
+    let requestBody = {
+        id: id,
+        update: {
+            unactive: `true`,
+        }
+    }
+
+    const res = await fetch('/evo/news/update', {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {'Content-Type': "application/json"}
+    })
+
+    if (res.status === 200) {
+        Swal.fire({
+            title: 'Новость успешно скрыта с сайта',
+            icon: 'success',
+            confirmButtonText: 'Ок'
+        })
+            .then( () => location.reload())
+    }
+    else Swal.fire({
+        title: 'Ошибка при попытке скрыть новость',
+        icon: 'error',
+        confirmButtonText: 'Ок'
+    })
 
 }

@@ -2,8 +2,8 @@ const newsModel = require('./models');
 
 module.exports.createNewsItem = (req, res, next) => {
     console.log('REQUEST', req.body)
-    const { title, previewImg, mainImg, content } = req.body;
-    newsModel.create({title, previewImg, mainImg, content})
+    const { title, previewImg, mainImg, content, link } = req.body;
+    newsModel.create({title, previewImg, mainImg, content, link})
         .then((newsItem) => {
             res.status(201).send(newsItem);
         })
@@ -29,6 +29,8 @@ module.exports.getNewsItem = (req, res, next) => {
 };
 
 module.exports.updateNewsItem = (req, res, next) => {
+    console.log(req.body)
+
     newsModel.findByIdAndUpdate(req.body.id, req.body.update)
         .then((newsItem) => {
             res.status(200).send(newsItem);
