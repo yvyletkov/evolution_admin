@@ -57,10 +57,10 @@ const listNews = async () => {
                         ${item.unactive === 'true' ? 'Новость скрыта' : 'Новость активна'}
                     </div>
                     <div class="col-12 col-md-4 mb-4 mb-md-0 mt-4 mt-md-0">
-                        <img style="height: 160px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
+                        <img style="height: 100%; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
                     </div>
                     <div class="col-12 col-md-8">
-                        <h4 class="m-0">${item.title}</h4>
+                        <h4 class="m-0 mt-4">${item.title}</h4>
                         <p class="mt-4">${item.content ? (cutTags(item.content).slice(0, 200) + '...') : item.link}</p>
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a href="/evo/news/edit?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0 ml-lg-0">Редактировать</a>
@@ -68,7 +68,7 @@ const listNews = async () => {
                             ${item.unactive === 'true' ?
                                 `<span data-news-id="${item._id}" class="btn btn-outline-primary float-lg-right activate-news-item-btn mb-3 mb-lg-0">Активировать</span>` :
                                 `<span data-news-id="${item._id}" class="btn btn-outline-primary float-lg-right deactivate-news-item-btn mb-3 mb-lg-0">Скрыть</span>`}
-                            <span data-news-id="${item._id}" class="btn btn-outline-danger float-lg-right delete-news-item-btn mb-3 mb-lg-0 mr-lg-0">Удалить</span>
+                            <span data-news-id="${item._id}" class="btn btn-outline-danger float-lg-right d-block d-md-inline delete-news-item-btn mb-3 mb-lg-0 mr-lg-0">Удалить</span>
                         </div>
 
                     </div>
