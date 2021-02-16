@@ -1,5 +1,5 @@
-let serverURL = "https://evo-dashboard.ml/"
-// let serverURL = "http://localhost:3333/";
+// let serverURL = "https://evo-dashboard.ml/"
+let serverURL = "http://localhost:3333/";
 let websiteURL = "https://evolutionsport.ru/new/"
 
 function getParameterByName(name, url = window.location.href) {
@@ -18,7 +18,7 @@ function cutTags(str) {
 
 window.addEventListener('load', async () => {
 
-    EDITOR = await ClassicEditor
+    window.EDITOR = await ClassicEditor
         .create(document.querySelector('#editor'), {
             removePlugins: ['ImageUpload'],
             language: 'ru',
