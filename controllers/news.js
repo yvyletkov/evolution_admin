@@ -1,4 +1,4 @@
-const newsModel = require('../models');
+const newsModel = require('../models/news');
 
 module.exports.createNewsItem = (req, res, next) => {
     console.log('REQUEST', req.body)
