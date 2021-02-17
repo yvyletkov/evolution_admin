@@ -16,30 +16,6 @@ function cutTags(str) {
     return str.replace(regex, "");
 }
 
-window.addEventListener('load', async () => {
-
-    window.EDITOR = await ClassicEditor
-        .create(document.querySelector('#editor'), {
-            removePlugins: ['ImageUpload'],
-            language: 'ru',
-            height: '300px'
-        })
-
-    EDITOR.setData('<p>Текст новости</p>');
-
-    document.querySelectorAll('#preview-img-input, #main-img-input').forEach((el) => el.addEventListener('change', function (el) {
-            let value = this.value.split('\\');
-            let fileName = value[value.length - 1]
-            console.log('value', this)
-            el.target.nextSibling.nextElementSibling.innerHTML = fileName;
-        })
-    )
-
-    document.querySelector('#update-news-item-btn').addEventListener('click', updateNewsItem)
-
-})
-
-
 const listNews = async () => {
     const res = await fetch('/evo/news/list', {
         method: "GET",
@@ -87,6 +63,23 @@ const listNews = async () => {
 }
 
 const loadCreateNewsForm = async () => {
+
+    window.EDITOR = await ClassicEditor
+        .create(document.querySelector('#editor'), {
+            removePlugins: ['ImageUpload'],
+            language: 'ru',
+            height: '300px'
+        })
+
+    EDITOR.setData('<p>Текст новости</p>');
+
+    document.querySelectorAll('#preview-img-input, #main-img-input').forEach((el) => el.addEventListener('change', function (el) {
+            let value = this.value.split('\\');
+            let fileName = value[value.length - 1]
+            console.log('value', this)
+            el.target.nextSibling.nextElementSibling.innerHTML = fileName;
+        })
+    )
 
     document.querySelector('#submit-btn').addEventListener('click', async () => {
         const res = await createNewsItem();
@@ -190,6 +183,26 @@ const loadCreateNewsForm = async () => {
 }
 
 const fillInEditForm = async () => {
+
+    window.EDITOR = await ClassicEditor
+        .create(document.querySelector('#editor'), {
+            removePlugins: ['ImageUpload'],
+            language: 'ru',
+            height: '300px'
+        })
+
+    EDITOR.setData('<p>Текст новости</p>');
+
+    document.querySelectorAll('#preview-img-input, #main-img-input').forEach((el) => el.addEventListener('change', function (el) {
+            let value = this.value.split('\\');
+            let fileName = value[value.length - 1]
+            console.log('value', this)
+            el.target.nextSibling.nextElementSibling.innerHTML = fileName;
+        })
+    )
+
+    document.querySelector('#update-news-item-btn').addEventListener('click', updateNewsItem)
+
     const id = getParameterByName('id')
     const res = await fetch('/evo/news/get', {
         method: "POST",
