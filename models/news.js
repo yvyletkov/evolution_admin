@@ -21,8 +21,8 @@ const evolutionNewsSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    unactive: {
-        type: String,
+    inactive: {
+        type: Boolean,
         required: false,
     },
 });

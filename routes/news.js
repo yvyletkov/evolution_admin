@@ -1,31 +1,8 @@
 const router = require('express').Router();
 const path = require('path');
-const multer = require("multer");
 const {createNewsItem, listNews, getNewsItem, updateNewsItem, deleteNewsItem} = require('../controllers/news');
+const upload = require('../controllers/fileUpload');
 
-const fileFilter = (req, file, cb) => {
-    if(file.mimetype === "image/png" ||
-        file.mimetype === "image/jpg"||
-        file.mimetype === "image/gif"||
-        file.mimetype === "image/jpeg"){
-        cb(null, true);
-    }
-    else{
-        cb(null, false);
-    }
-}
-
-const storageConfig = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname.replace('/routes', '')+'/static/uploads'));
-    },
-    filename: (req, file, cb) => {
-        const fileName = (+ Date.now() + '-' + file.originalname)
-        cb(null, fileName.split(' ').join('_') );
-    }
-});
-
-const upload = multer({storage: storageConfig, fileFilter: fileFilter});
 router.post("/evo/news/upload-photos", upload.any(), function (req, res, next) {
 
     console.log('ФАЙЛЫ', req.files)

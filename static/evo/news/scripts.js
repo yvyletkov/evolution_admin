@@ -1,5 +1,5 @@
-let serverURL = "https://evo-dashboard.ml/"
-// let serverURL = "http://localhost:3333/";
+// let serverURL = "https://evo-dashboard.ml/"
+let serverURL = "http://localhost:3333/";
 let websiteURL = "https://evolutionsport.ru/new/"
 
 function getParameterByName(name, url = window.location.href) {
@@ -51,10 +51,10 @@ const listNews = async () => {
 
         document.querySelector("#news-list-wrapper").insertAdjacentHTML('beforeend', `
         <div class="card mb-4" data-news-id="${item._id}" >
-            <div class="card-body" ${item.unactive === 'true' ? 'style="opacity: 0.5"' : ''}>
+            <div class="card-body" ${item.inactive === true ? 'style="opacity: 0.5"' : ''}>
                 <div class="row">
                     <div style="position:absolute;top:20px;right: 30px;font-size: 13px;color:#a0a0a0">
-                        ${item.unactive === 'true' ? 'Новость скрыта' : 'Новость активна'}
+                        ${item.inactive === true ? 'Новость скрыта' : 'Новость активна'}
                     </div>
                     <div class="col-12 col-md-4 mb-4 mb-md-0 mt-4 mt-md-0">
                         <img style="height: 185px; width: 100%; object-fit: cover" src="${serverURL}${item.previewImg}" alt="">
@@ -65,7 +65,7 @@ const listNews = async () => {
                         <div class="btn-group" style="flex-wrap: wrap" role="group" aria-label="Basic example">
                             <a href="/evo/news/edit?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0 ml-lg-0">Редактировать</a>
                             <a href="${websiteURL}news.html?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0">Открыть на сайте</a>
-                            ${item.unactive === 'true' ?
+                            ${item.inactive === true ?
                                 `<span data-news-id="${item._id}" class="btn btn-outline-primary float-lg-right activate-news-item-btn mb-3 mb-lg-0">Активировать</span>` :
                                 `<span data-news-id="${item._id}" class="btn btn-outline-primary float-lg-right deactivate-news-item-btn mb-3 mb-lg-0">Скрыть</span>`}
                             <span data-news-id="${item._id}" class="btn btn-outline-danger float-lg-right d-block d-md-inline delete-news-item-btn mb-3 mb-lg-0 mr-lg-0">Удалить</span>
@@ -357,7 +357,7 @@ const activateNewsItem = async (e) => {
     let requestBody = {
         id: id,
         update: {
-            unactive: `false`,
+            inactive: false,
         }
     }
 
@@ -390,7 +390,7 @@ const deactivateNewsItem = async (e) => {
     let requestBody = {
         id: id,
         update: {
-            unactive: `true`,
+            inactive: true,
         }
     }
 

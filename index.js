@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors')
-const router = require("./routes/index");
+const {router} = require("./routes/index");
 
 const { PORT = 3333 } = process.env;
 
