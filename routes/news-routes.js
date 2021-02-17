@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const path = require('path');
-const {createNewsItem, listNews, getNewsItem, updateNewsItem, deleteNewsItem} = require('../controllers/news');
+const {createNewsItem, listNews, getNewsItem, updateNewsItem, deleteNewsItem} = require('../controllers/news-controller');
 const upload = require('../controllers/fileUpload');
 
 router.post("/evo/news/upload-photos", upload.any(), function (req, res, next) {

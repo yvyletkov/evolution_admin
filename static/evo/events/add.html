@@ -34,12 +34,34 @@
 <div  class="container news-list">
     <div id="news-list-wrapper">
         <h3 class="mb-3 mt-3">Добавить событие в календарь сайта EvolutionSport.ru</h3><br><br>
-        <div class="range"></div>
+
+        <label class="label-main" for="title-input">Заголовок события</label>
+        <input id="title-input" placeholder="Введите заголовок" class="form-control input-main mb-4" type="text"/>
+
+        <label class="label-main" for="description-input">Описание события</label>
+        <textarea id="description-input" placeholder="Введите описание" class="form-control input-main mb-4"></textarea>
+
+        <label class="label-main" for="link-input">Ссылка на cобытие (необязательно)</label>
+        <input id="link-input" placeholder="Ссылка в формате https://example.ru" class="form-control input-main mb-4" type="text"/>
+
+        <label class="label-main" for="preview-img-input">Изображение для миниатюры (максимамальная ширина: 400px)</label>
+        <div class="custom-file mb-4">
+            <input type="file" class="custom-file-input input-main" id="preview-img-input">
+            <label class="custom-file-label" for="preview-img-input">Нажмите, чтобы выбрать миниатюру</label>
+        </div>
+
+        <label class="label-main ">Даты проведения (можно выбрать промежуток от и до)</label>
+        <div class="range mt-2 mb-4"></div>
+
+        <button id="submit-btn" class="btn  btn-success">Опубликовать новость</button>
+
+
     </div>
 </div>
 
 <script src="../../assets/js/pickmeup.min.js"></script>
 <script src="scripts.js"></script>
+<script>window.addEventListener('load', loadCreateEventForm) </script>
 
 </body>
 </html>

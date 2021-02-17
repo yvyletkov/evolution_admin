@@ -30,7 +30,7 @@
       outline: none;
       text-decoration: none; }
     .pickmeup .pmu-instance .pmu-today {
-      background: #17384d;
+      background: transparent;
       color: #88c5eb; }
     .pickmeup .pmu-instance .pmu-button:hover {
       background: transparent;
@@ -43,7 +43,7 @@
       cursor: default; }
     .pickmeup .pmu-instance .pmu-selected {
       background: #136a9f;
-      color: #323232; }
+      color: #fff; }
     .pickmeup .pmu-instance .pmu-not-in-month.pmu-selected {
       background: #17384d; }
     .pickmeup .pmu-instance nav {

@@ -1,4 +1,4 @@
-const newsModel = require('../models/news');
+const newsModel = require('../models/news-model');
 
 module.exports.createNewsItem = (req, res, next) => {
     console.log('REQUEST', req.body)
@@ -41,7 +41,7 @@ module.exports.updateNewsItem = (req, res, next) => {
 module.exports.deleteNewsItem = (req, res, next) => {
     newsModel.findByIdAndDelete(req.body.id, req.body.update)
         .then(() => {
-            res.status(200).send({status: 'Deleted successfully'});
+            res.status(200).send({status: 'News item deleted successfully'});
         })
         .catch(() => res.status(400));
 };
