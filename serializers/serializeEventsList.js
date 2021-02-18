@@ -32,9 +32,10 @@ module.exports = (eventList) => {
         }
 
         else {
+
             serializedList = [
                 ...serializedList,
-                item
+                {...item._doc, date: item.startDate}
             ]
         }
 
