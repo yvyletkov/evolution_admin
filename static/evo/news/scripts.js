@@ -1,5 +1,5 @@
-let serverURL = "https://evo-dashboard.ml/"
-// let serverURL = "http://localhost:3333/";
+// let serverURL = "https://evo-dashboard.ml/"
+let serverURL = "http://localhost:3333/";
 let websiteURL = "https://evolutionsport.ru/new/"
 
 function getParameterByName(name, url = window.location.href) {
@@ -15,6 +15,21 @@ function cutTags(str) {
     const regex = /<[^>]*>/g;
     return str.replace(regex, "");
 }
+
+window.addEventListener('load', () => {
+
+    let slideout = new Slideout({
+        'panel': document.getElementById('content'),
+        'menu': document.getElementById('menu'),
+        'padding': 256,
+        'tolerance': 70
+    });
+
+    document.querySelector('.toggle-button').addEventListener('click', function () {
+        slideout.toggle();
+    });
+
+})
 
 const listNews = async () => {
     const res = await fetch('/evo/news/list', {

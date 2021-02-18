@@ -16,63 +16,80 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/evo/events/">События</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link cursor-pointer" href="/evo/events/add" id="create-news-item-link">Создать
-                событие</a>
-            <a class="nav-item nav-link" href="/evo/events/" id="news-list-link">Список всех событий</a>
-        </div>
+<div id="menu" class="menu-section">
+    <h2 class="menu-section-title">Новости</h2>
+    <a class="menu-section-item" href="/evo/news/add">Добавить новость</a>
+    <a class="menu-section-item" href="/evo/news">Список новостей</a>
+    <h2 class="menu-section-title">События</h2>
+    <a class="menu-section-item" href="/evo/events/add">Добавить событие</a>
+    <a class="menu-section-item" href="/evo/events">Список событий</a>
+    <div class="menu-section-footer">
+        <p>Админ-панель</p>
+        <p>evolutionsport.ru</p>
     </div>
-</nav>
-
-<div class="container news-edit">
-    <h3 class="mb-3 mt-3">Редактирование новости</h3><br><br>
-    <label class="label-main" for="title-input">Заголовок новости</label>
-    <input id="title-input" placeholder="Введите заголовок" class="form-control input-main mb-5" type="text"/>
-
-    <label class="label-main">Контент</label>
-    <div id="editor"></div>
-
-    <label class="label-main" for="link-input">Ссылка на новость (необязательно)</label>
-    <input id="link-input" placeholder="Ссылка в формате https://example.ru" class="form-control input-main mb-4" type="text"/>
-
-    <div class="row mb-5">
-        <div class="col-3">
-            <img id="main-img" class="edit-form-img" alt="Основное изображение">
-        </div>
-        <div class="col-9 d-flex flex-column justify-content-center">
-            <label class="label-main" for="main-img-input">Основное изображение (максимамальная ширина: 1000px)</label>
-            <div class="custom-file">
-                <input type="file" class="custom-file-input input-main" id="main-img-input">
-                <label class="custom-file-label" for="main-img-input">Нажмите, чтобы выбрать основное изображение</label>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-5">
-        <div class="col-3">
-            <img id="preview-img" class="edit-form-img" alt="Миниатюра">
-        </div>
-        <div class="col-9 d-flex flex-column justify-content-center">
-            <label class="label-main" for="preview-img-input">Изображение для миниатюры (максимамальная ширина:
-                400px)</label>
-            <div class="custom-file">
-                <input type="file" class="custom-file-input input-main" id="preview-img-input">
-                <label class="custom-file-label" for="preview-img-input">Нажмите, чтобы выбрать миниатюру</label>
-            </div>
-        </div>
-    </div>
-
-    <button id="update-news-item-btn" class="btn btn-success">Опубликовать изменения</button>
 </div>
 
+<main id="content">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container justify-content-end" style="position: relative">
+            <div class="toggle-button">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <img src="../../assets/img/evo-logo.jpg" class="logo"/>
+            <a class="navbar-brand mr-0" href="/evo/events">События</a>
+
+        </div>
+    </nav>
+
+    <div class="container news-edit">
+        <h3 class="mb-3 mt-5">Редактирование новости</h3><br><br>
+        <label class="label-main" for="title-input">Заголовок новости</label>
+        <input id="title-input" placeholder="Введите заголовок" class="form-control input-main mb-5" type="text"/>
+
+        <label class="label-main">Контент</label>
+        <div id="editor"></div>
+
+        <label class="label-main" for="link-input">Ссылка на новость (необязательно)</label>
+        <input id="link-input" placeholder="Ссылка в формате https://example.ru" class="form-control input-main mb-4"
+               type="text"/>
+
+        <div class="row mb-5">
+            <div class="col-3">
+                <img id="main-img" class="edit-form-img" alt="Основное изображение">
+            </div>
+            <div class="col-9 d-flex flex-column justify-content-center">
+                <label class="label-main" for="main-img-input">Основное изображение (максимамальная ширина:
+                    1000px)</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input input-main" id="main-img-input">
+                    <label class="custom-file-label" for="main-img-input">Нажмите, чтобы выбрать основное
+                        изображение</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-3">
+                <img id="preview-img" class="edit-form-img" alt="Миниатюра">
+            </div>
+            <div class="col-9 d-flex flex-column justify-content-center">
+                <label class="label-main" for="preview-img-input">Изображение для миниатюры (максимамальная ширина:
+                    400px)</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input input-main" id="preview-img-input">
+                    <label class="custom-file-label" for="preview-img-input">Нажмите, чтобы выбрать миниатюру</label>
+                </div>
+            </div>
+        </div>
+
+        <button id="update-news-item-btn" class="btn btn-success">Опубликовать изменения</button>
+    </div>
+</main>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>-->
 <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>-->
 <!--    <script src="https://unpkg.com/shards-ui@latest/dist/js/shards.min.js"></script>-->
