@@ -1,5 +1,5 @@
-// let serverURL = "https://evo-dashboard.ml/"
-let serverURL = "http://localhost:3333/";
+let serverURL = "https://evo-dashboard.ml/"
+// let serverURL = "http://localhost:3333/";
 let websiteURL = "https://evolutionsport.ru/new/"
 
 window.addEventListener('load', () => {
