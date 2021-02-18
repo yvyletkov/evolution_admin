@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const path = require('path');
 const upload = require('../controllers/fileUpload');
-const {createEvent, listEvents, getEvent, updateEvent, deleteEvent} = require('../controllers/events-controller');
+const {createEvent, listEvents, getEvent, updateEvent, deleteEvent, sendModifiedEventsList} = require('../controllers/events-controller');
 
 router.post("/evo/events/upload-photos", upload.any(), function (req, res, next) {
 
@@ -33,6 +33,7 @@ router.get('/evo/events/edit',function(req, res){
 
 router.post('/evo/events/add', createEvent)
 router.get('/evo/events/list', listEvents)
+router.get('/evo/events/modified-list', sendModifiedEventsList)
 router.post("/evo/events/get", getEvent)
 router.post("/evo/events/update", updateEvent)
 router.delete("/evo/events/delete", deleteEvent)

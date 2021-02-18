@@ -159,7 +159,7 @@ const listEvents = async () => {
     data.forEach(function(item){
 
         document.querySelector("#events-list-wrapper").insertAdjacentHTML('beforeend', `
-        <div class="card mb-4" data-news-id="${item._id}" >
+        <div class="card mb-4" data-event-id="${item._id}" >
             <div class="card-body" ${item.inactive === true ? 'style="opacity: 0.5"' : ''}>
                 <div class="row">` +
                     // <div style="position:absolute;top:20px;right: 30px;font-size: 13px;color:#a0a0a0">
@@ -169,16 +169,20 @@ const listEvents = async () => {
                         <img style="height: 185px; width: 100%; object-fit: cover" src="${serverURL}${item.img}" alt="">
                     </div>
                     <div class="col-12 col-md-8">
-                        <h4 class="m-0 mt-4">${item.value}</h4>
-                        <p class="mt-4">${item.desc ? item.desc.slice(0, 130) + '...' : 'Описание отсутствует'}</p>
+                        <h4 class="m-0 mt-3">${item.value}</h4>
+                        <p class="mt-4 mb-3">${item.desc ? '<b>Описание: </b>' + item.desc : 'Описание отсутствует'}</p>
+                        
+                        <p class="mb-1 mt-1"><b>Начало: </b>${item.startDate}</p>
+                        <p class="mb-4"><b>Конец: </b> ${item.endDate}</p>
+                        
                         <div class="btn-group" style="flex-wrap: wrap" role="group" aria-label="Basic example">
-                            <a href="/evo/news/edit?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0 ml-lg-0">Редактировать</a>
+                            <a href="/evo/events/edit?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0 ml-lg-0">Редактировать</a>
                             ${item.link && 
             `<a href="${item.link}" class="btn btn-outline-primary mb-3 mb-lg-0">Прикрепленная ссылка</a>`}
                             ${item.inactive === true ?
-            `<span data-news-id="${item._id}" class="btn btn-outline-primary float-lg-right activate-news-item-btn mb-3 mb-lg-0">Отобразить на сайте</span>` :
-            `<span data-news-id="${item._id}" class="btn btn-outline-primary float-lg-right deactivate-news-item-btn mb-3 mb-lg-0">Скрыть с сайта</span>`}
-                            <span data-news-id="${item._id}" class="btn btn-outline-danger float-lg-right d-block d-md-inline delete-news-item-btn mb-3 mb-lg-0 mr-lg-0">Удалить</span>
+            `<span data-event-id="${item._id}" class="btn btn-outline-primary float-lg-right activate-event-btn mb-3 mb-lg-0">Отобразить на сайте</span>` :
+            `<span data-event-id="${item._id}" class="btn btn-outline-primary float-lg-right deactivate-event-btn mb-3 mb-lg-0">Скрыть с сайта</span>`}
+                            <span data-event-id="${item._id}" class="btn btn-outline-danger float-lg-right d-block d-md-inline delete-event-btn mb-3 mb-lg-0 mr-lg-0">Удалить</span>
                         </div>
 
                     </div>
@@ -190,9 +194,9 @@ const listEvents = async () => {
         `);
     })
 
-    document.querySelectorAll('.delete-news-item-btn').forEach( el => el.addEventListener('click', deleteEvent) )
-    document.querySelectorAll('.activate-news-item-btn').forEach( el => el.addEventListener('click', activateEvent) )
-    document.querySelectorAll('.deactivate-news-item-btn').forEach( el => el.addEventListener('click', deactivateEvent) )
+    document.querySelectorAll('.delete-event-btn').forEach( el => el.addEventListener('click', deleteEvent) )
+    document.querySelectorAll('.activate-event-btn').forEach( el => el.addEventListener('click', activateEvent) )
+    document.querySelectorAll('.deactivate-event-btn').forEach( el => el.addEventListener('click', deactivateEvent) )
 
 }
 
@@ -208,7 +212,7 @@ const deleteEvent = async (e) => {
     }).then( async (result) => {
         if (result.isConfirmed) {
 
-            const id = e.target.dataset.newsId
+            const id = e.target.dataset.eventId
             const res = await fetch('/evo/events/delete', {
                 method: "DELETE",
                 body: JSON.stringify({
@@ -232,7 +236,7 @@ const deleteEvent = async (e) => {
 }
 
 const activateEvent = async (e) => {
-    const id = e.target.dataset.newsId
+    const id = e.target.dataset.eventId
 
     let requestBody = {
         id: id,
@@ -264,7 +268,7 @@ const activateEvent = async (e) => {
 }
 
 const deactivateEvent = async (e) => {
-    const id = e.target.dataset.newsId
+    const id = e.target.dataset.eventId
 
     let requestBody = {
         id: id,
@@ -292,6 +296,133 @@ const deactivateEvent = async (e) => {
         icon: 'error',
         confirmButtonText: 'Ок'
     })
+
+}
+
+const fillInEditForm = async () => {
+
+    window.DATEPICKER = pickmeup('.range', {
+        flat: true,
+        mode: 'range',
+        format: 'Y-m-d',
+        locale: 'ru'
+    });
+
+    document.querySelector('#preview-img-input').addEventListener('change', function (el) {
+            let value = this.value.split('\\');
+            let fileName = value[value.length - 1]
+            console.log('value', this)
+            el.target.nextSibling.nextElementSibling.innerHTML = fileName;
+        })
+
+    document.querySelector('#update-event-item-btn').addEventListener('click', updateEvent)
+
+    const id = getParameterByName('id')
+    const res = await fetch('/evo/events/get', {
+        method: "POST",
+        body: JSON.stringify({
+            id: `${id}`
+        }),
+        headers: {'Content-Type': "application/json"}
+    })
+    let data = await res.json();
+
+    DATEPICKER.set_date([data.startDate, data.endDate]);
+    document.querySelector('#title-input').value = data.value;
+    document.querySelector('#link-input').value = data.link || "";
+    document.querySelector('#description-input').value = data.desc;
+    document.querySelector('#preview-img').src = `${serverURL}${data.img}`
+}
+
+const updateEvent = async () => {
+
+    const titleText = document.querySelector('#title-input').value
+    const descriptionText = document.querySelector('#description-input').value
+    const previewImg = document.querySelector('#preview-img-input').files[0]
+    const link = document.querySelector('#link-input').value || '';
+    const startDate = DATEPICKER.get_date(true)[0];
+    const endDate = DATEPICKER.get_date(true)[1];
+
+    if (titleText) {
+
+        let previewImageUploadRes;
+
+        if(previewImg) {
+            const formData = new FormData();
+            formData.append("preview-img", previewImg);
+            previewImageUploadRes = await fetch('/evo/events/upload-photos', {method: "POST", body: formData})
+        }
+
+        console.log('preview', previewImageUploadRes)
+
+        if ( previewImg && previewImageUploadRes.status !== 200 ) {
+
+            Swal.fire({
+                title: 'Произошла ошибка при отправке изображения :(',
+                text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
+                icon: 'error',
+                confirmButtonText: 'Ладно'
+            })
+
+        }
+        else {
+            let previewImageData
+
+            let requestBody = {
+                id: getParameterByName('id'),
+                update: {
+                    value: `${titleText}`,
+                    desc: `${descriptionText}`,
+                    link: link || '',
+                    startDate: `${startDate}`,
+                    sendDate: `${endDate}`,
+                }
+            }
+
+            if (previewImg) {
+                previewImageData = await previewImageUploadRes.json();
+                requestBody.update = {
+                    ...requestBody.update,
+                    img: `${previewImageData[0].path}`,
+                }
+            }
+
+            console.log('IMAGE DATA', previewImageData);
+
+            const res = await fetch('/evo/events/update', {
+                method: "POST",
+                body: JSON.stringify(requestBody),
+                headers: {'Content-Type': "application/json"}
+            })
+
+            if (res.status === 200) {
+                Swal.fire({
+                    title: 'Событие обновлена',
+                    icon: 'success',
+                    confirmButtonText: 'Отлично',
+                }).then( () => location.reload())
+            }
+            else {
+                Swal.fire({
+                    title: 'Произошла ошибка :(',
+                    text: 'Обратитесь к одному из прекрасных разработчиков UPRO',
+                    icon: 'error',
+                    confirmButtonText: 'Ладно',
+                })
+            }
+
+        }
+
+
+    }
+    else {
+        Swal.fire({
+            title: 'Необходимо указать название события',
+            // text: 'И добавить оба изображения',
+            icon: 'error',
+            confirmButtonText: 'Ок'
+        })
+    }
 
 }
 

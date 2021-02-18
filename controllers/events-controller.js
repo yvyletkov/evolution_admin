@@ -1,4 +1,5 @@
 const eventsModel = require('../models/events-model');
+const serializeEventsList = require('../serializers/serializeEventsList');
 
 module.exports.createEvent = (req, res, next) => {
     console.log('REQUEST', req.body)
@@ -42,6 +43,14 @@ module.exports.deleteEvent = (req, res, next) => {
     eventsModel.findByIdAndDelete(req.body.id, req.body.update)
         .then(() => {
             res.status(200).send({status: 'Event deleted successfully'});
+        })
+        .catch(() => res.status(400));
+};
+
+module.exports.sendModifiedEventsList = (req, res, next) => {
+    eventsModel.find({})
+        .then((eventsList) => {
+            res.status(200).send(serializeEventsList(eventsList));
         })
         .catch(() => res.status(400));
 };

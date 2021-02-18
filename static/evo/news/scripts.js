@@ -342,7 +342,6 @@ const updateNewsItem = async () => {
 
 }
 
-
 const deleteNewsItem = async (e) => {
 
     Swal.fire({
