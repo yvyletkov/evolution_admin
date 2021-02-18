@@ -2,7 +2,8 @@ let serverURL = "https://evo-dashboard.ml/"
 // let serverURL = "http://localhost:3333/";
 let websiteURL = "https://evolutionsport.ru/new/"
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
+
 
     let slideout = new Slideout({
         'panel': document.getElementById('content'),
@@ -10,10 +11,19 @@ window.addEventListener('load', () => {
         'padding': 256,
         'tolerance': 70
     });
-
+    
     document.querySelector('.toggle-button').addEventListener('click', function () {
         slideout.toggle();
     });
+
+    let res = await fetch('/evo/events/modified-list', {
+        method: "GET"
+    })
+
+    let resjson = await res.json();
+
+    console.log('modified List', resjson)
+
 
 })
 

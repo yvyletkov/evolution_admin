@@ -20,20 +20,23 @@ module.exports = (eventList) => {
     eventList.map( (item) => {
 
         if (item.startDate !== item.endDate){
+
             let dates = getDates(new Date(item.startDate), new Date(item.endDate));
 
-            dates.forEach( (date) => serializedList = [
+            dates.map( (date) => serializedList = [
                 ...serializedList,
-                {...item, startDate: date.format("yyyy-mm-dd")}
+                {...item._doc, date: date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)}
 
             ])
 
         }
 
-        else serializedList = [
-            ...serializedList,
-            item
-        ]
+        else {
+            serializedList = [
+                ...serializedList,
+                item
+            ]
+        }
 
     })
 
