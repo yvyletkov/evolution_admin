@@ -11,7 +11,7 @@ window.addEventListener('load', async () => {
         'padding': 256,
         'tolerance': 70
     });
-    
+
     document.querySelector('.toggle-button').addEventListener('click', function () {
         slideout.toggle();
     });
@@ -182,8 +182,8 @@ const listEvents = async () => {
                         <h4 class="m-0 mt-3">${item.value}</h4>
                         <p class="mt-4 mb-3">${item.desc ? '<b>Описание: </b>' + item.desc : 'Описание отсутствует'}</p>
                         
-                        <p class="mb-1 mt-1"><b>Начало: </b>${item.startDate}</p>
-                        <p class="mb-4"><b>Конец: </b> ${item.endDate}</p>
+                        <p class="mb-1 mt-1"><b>Начало: </b>${new Date(item.startDate).toLocaleDateString()}</p>
+                        <p class="mb-4"><b>Конец: </b> ${new Date(item.endDate).toLocaleDateString()}</p>
                         
                         <div class="btn-group" style="flex-wrap: wrap" role="group" aria-label="Basic example">
                             <a href="/evo/events/edit?id=${item._id}" class="btn btn-outline-primary mb-3 mb-lg-0 ml-lg-0">Редактировать</a>
