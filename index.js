@@ -17,7 +17,7 @@ app.use(express.static(__dirname + '/static'));
 app.use(cors())
 app.use(router);
 
-mongoose.connect('mongodb://localhost:27017/evo_db', {
+mongoose.connect('mongodb://root:example@188.225.84.39:27017/evo_db?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
